@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Notifications</h2>
+<table>
+  <tr><th>Message</th><th>Event</th><th>Date</th><th>Status</th></tr>
+  {% for n in notifications %}
+  <tr>
+    <td>{{ n.message }}</td>
+    <td>{{ n.event_name }}</td>
+    <td>{{ n.notification_date }}</td>
+    <td>{% if n.is_read %}Read{% else %}Unread{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

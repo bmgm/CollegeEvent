@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Events</h2>
+<div class="events-grid">
+  {% for ev in events %}
+  <div class="card">
+    <h3>{{ ev.event_name }}</h3>
+    <p><strong>Date:</strong> {{ ev.date }}</p>
+    <p><strong>Time:</strong> {{ ev.time }}</p>
+    <p><strong>Venue:</strong> {{ ev.venue }}</p>
+    <p>{{ ev.description[:120] }}...</p>
+    <a href="{{ url_for('event_details', event_id=ev.event_id) }}">View Details</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Dashboard</h2>
+<p>Welcome, {{ session.username }}</p>
+<div class="stats">
+  <div class="stat-card"><h3>Total Events</h3><p>{{ total_events }}</p></div>
+  <div class="stat-card"><h3>My Registrations</h3><p>{{ my_reg_count }}</p></div>
+</div>
+<h3>Upcoming Events</h3>
+<div class="events-grid">
+  {% for ev in upcoming_events %}
+  <div class="card"><h3>{{ ev.event_name }}</h3><p>{{ ev.date }}</p></div>
+  {% endfor %}
+</div>
+<div class="nav-buttons">
+  <a href="{{ url_for('events') }}" class="btn">View Events</a>
+  <a href="{{ url_for('my_registrations') }}" class="btn">My Registrations</a>
+  <a href="{{ url_for('notifications') }}" class="btn">Notifications</a>
+  <a href="{{ url_for('participation') }}" class="btn">Participation</a>
+</div>
+{% endblock %}

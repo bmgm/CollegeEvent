@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Participation Statistics</h2>
+<h3>Department-wise</h3>
+<table><tr><th>Department</th><th>Count</th></tr>
+{% for row in dept_stats %}<tr><td>{{ row.department }}</td><td>{{ row.count }}</td></tr>{% endfor %}
+</table>
+<h3>Year-wise</h3>
+<table><tr><th>Year</th><th>Count</th></tr>
+{% for row in year_stats %}<tr><td>{{ row.year }}</td><td>{{ row.count }}</td></tr>{% endfor %}
+</table>
+<h3>Department + Year</h3>
+<table><tr><th>Department</th><th>Year</th><th>Count</th></tr>
+{% for row in dept_year_stats %}<tr><td>{{ row.department }}</td><td>{{ row.year }}</td><td>{{ row.count }}</td></tr>{% endfor %}
+</table>
+{% endblock %}

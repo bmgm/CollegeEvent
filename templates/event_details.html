@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ event.event_name }}</h2>
+<p><strong>Date:</strong> {{ event.date }} &nbsp;|&nbsp; <strong>Time:</strong> {{ event.time }}</p>
+<p><strong>Venue:</strong> {{ event.venue }}</p>
+<p><strong>Eligibility:</strong> {{ event.eligibility }}</p>
+<p>{{ event.description }}</p>
+<p><strong>Rules:</strong> {{ event.rules }}</p>
+{% if registration %}
+  <p><strong>Status:</strong> {{ registration.status }}</p>
+  {% if registration.status == 'Registered' %}
+  <form method="POST" action="{{ url_for('cancel_registration', registration_id=registration.registration_id) }}">
+    <button type="submit">Cancel Registration</button>
+  </form>
+  {% endif %}
+{% else %}
+  <form method="POST" action="{{ url_for('register_event', event_id=event.event_id) }}">
+    <button type="submit">Register for Event</button>
+  </form>
+{% endif %}
+{% endblock %}

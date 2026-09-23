@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Registrations</h2>
+<table>
+  <tr><th>Event</th><th>Date</th><th>Time</th><th>Venue</th><th>Registration Date</th><th>Status</th><th>Action</th></tr>
+  {% for reg in registrations %}
+  <tr>
+    <td>{{ reg.event_name }}</td>
+    <td>{{ reg.date }}</td>
+    <td>{{ reg.time }}</td>
+    <td>{{ reg.venue }}</td>
+    <td>{{ reg.registration_date }}</td>
+    <td>{{ reg.status }}</td>
+    <td>
+      {% if reg.status == 'Registered' %}
+      <form method="POST" action="{{ url_for('cancel_registration', registration_id=reg.registration_id) }}" style="display:inline">
+        <button type="submit">Cancel</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}

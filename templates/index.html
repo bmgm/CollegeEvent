@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>College Event Management System</h1>
+<p>Register for college events, manage your registrations, and view participation stats.</p>
+<a href="{{ url_for('events') }}" class="btn">View Events</a>
+{% if not session.get('student_id') %}
+<a href="{{ url_for('register') }}" class="btn">Register</a>
+<a href="{{ url_for('login') }}" class="btn">Login</a>
+{% endif %}
+<h2>Upcoming Events</h2>
+<div class="events-grid">
+  {% for ev in events %}
+  <div class="card">
+    <h3>{{ ev.event_name }}</h3>
+    <p>{{ ev.date }} — {{ ev.venue }}</p>
+    <a href="{{ url_for('event_details', event_id=ev.event_id) }}">View Details</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
