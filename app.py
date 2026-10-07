@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import send_from_directory
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
@@ -176,6 +177,17 @@ def register_event(event_id):
                 (student_id, event_id, f'You have successfully registered for {event["event_name"]}.')
             )
             db.commit()
+
+            # Redirect to WhatsApp with student's mobile number
+            student = db.execute('SELECT mobile FROM students WHERE student_id = ?', (student_id,)).fetchone()
+            if student and student['mobile']:
+                # Clean mobile number for WhatsApp URL (remove spaces, dashes, etc.)
+                mobile_clean = ''.join(filter(str.isdigit, student['mobile']))
+                # Ensure it starts with country code if not present (assuming India - 91)
+                if len(mobile_clean) == 10:
+                    mobile_clean = '91' + mobile_clean
+                whatsapp_url = f'https://wa.me/{mobile_clean}?text=I%20have%20successfully%20registered%20for%20{event["event_name"]}%20at%20College%20Event%20Management%20System.'
+                return redirect(whatsapp_url)
         else:
             flash('You are already registered for this event', 'error')
     else:
@@ -193,8 +205,19 @@ def register_event(event_id):
         )
         db.commit()
 
-    db.close()
-    return redirect(url_for('event_details', event_id=event_id))
+        # Redirect to WhatsApp with student's mobile number
+        student = db.execute('SELECT mobile FROM students WHERE student_id = ?', (student_id,)).fetchone()
+        if student and student['mobile']:
+            # Clean mobile number for WhatsApp URL (remove spaces, dashes, etc.)
+            mobile_clean = ''.join(filter(str.isdigit, student['mobile']))
+            # Ensure it starts with country code if not present (assuming India - 91)
+            if len(mobile_clean) == 10:
+                mobile_clean = '91' + mobile_clean
+            whatsapp_url = f'https://wa.me/{mobile_clean}?text=I%20have%20successfully%20registered%20for%20{event["event_name"]}%20at%20College%20Event%20Management%20System.'
+            return redirect(whatsapp_url)
+
+        db.close()
+        return redirect(url_for('event_details', event_id=event_id))
 
 # My registrations
 @app.route('/my-registrations')
@@ -323,6 +346,26 @@ def about():
 @app.route('/contact')
 def contact():
     return render_template('contact.html')
+
+# Serve event images from resources folder
+@app.route('/resources/<filename>')
+def serve_resource(filename):
+    return send_from_directory(os.path.join(os.path.dirname(__file__), 'resources'), filename)
+
+# Profile page
+@app.route('/profile')
+def profile():
+    if 'student_id' not in session:
+        return redirect(url_for('login'))
+
+    student_id = session['student_id']
+    db = get_db()
+    student = db.execute(
+        'SELECT student_id, name, username, department, year, mobile, created_at FROM students WHERE student_id = ?',
+        (student_id,)
+    ).fetchone()
+    db.close()
+    return render_template('profile.html', student=student)
 
 if __name__ == '__main__':
     app.run(debug=True)

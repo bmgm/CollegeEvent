@@ -61,11 +61,19 @@ def init_db():
         ("Coding Competition", "A programming challenge testing algorithmic skills and problem-solving.", "2026-11-05", "10:00 AM", "Computer Lab", "BCA, BCS, BBA", "Use provided IDE; no external resources.", "coding.jpg"),
         ("Business Quiz", "An interactive quiz on business concepts, economics and marketing.", "2026-11-12", "02:00 PM", "Seminar Hall", "B.Com, B.Com(CA)", "Teams of 2; no mobile phones.", "quiz.jpg"),
         ("Traditional Day", "A day celebrating traditional culture, dress and heritage of our college.", "2026-11-20", "11:00 AM", "College Campus", "All students", "Wear traditional attire.", "traditional.jpg"),
+        ("Tech Symposium", "A one-day technology symposium with workshops on AI, machine learning and cloud computing.", "2026-10-28", "09:30 AM", "Smart Lab", "All engineering students", "Bring your own laptop.", "tech.jpg"),
+        ("Debate Competition", "Inter-departmental debate on current social and technical issues.", "2026-11-28", "01:00 PM", "Auditorium", "All students", "Teams of 2; 5-minute speeches.", "debate.jpg"),
+        ("Art & Craft Exhibition", "Showcasing creative art, crafts and handmade products from student artists.", "2026-12-05", "10:00 AM", "Arts Block Hall", "All students", "Booth registration required.", "art.jpg"),
+        ("Career Guidance Seminar", "Industry leaders share insights on placements, higher studies and skill development.", "2026-11-15", "03:00 PM", "Seminar Hall", "Final year students", "No prior registration needed.", "career.jpg"),
+        ("New Year Celebration", "Festive celebration to welcome the new year with performances and food stalls.", "2026-12-31", "06:00 PM", "College Ground", "All students", "Open to all; evening event.", "newyear.jpg"),
     ]
     c.execute("SELECT COUNT(*) FROM events")
-    if c.fetchone()[0] == 0:
+    if c.fetchone()[0] < 10:
         for ev in sample_events:
             c.execute("INSERT INTO events (event_name, description, date, time, venue, eligibility, rules, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", ev)
+    else:
+        # Remove duplicate copies of original 5 events that got inserted before
+        c.execute("DELETE FROM events WHERE event_id IN (6, 7, 8, 9, 10)")
 
     conn.commit()
     conn.close()

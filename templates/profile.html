@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Profile - College Event{% endblock %}
+{% block content %}
+<h2>My Profile</h2>
+<div class="profile-section">
+  <h3>Personal Details</h3>
+  <div class="profile-field"><strong>Student ID</strong><span>{{ student.student_id }}</span></div>
+  <div class="profile-field"><strong>Name</strong><span>{{ student.name }}</span></div>
+  <div class="profile-field"><strong>Username</strong><span>{{ student.username }}</span></div>
+  <div class="profile-field"><strong>Department</strong><span>{{ student.department }}</span></div>
+  <div class="profile-field"><strong>Year</strong><span>{{ student.year }}</span></div>
+  <div class="profile-field"><strong>Mobile</strong><span>{{ student.mobile }}</span></div>
+  <div class="profile-field"><strong>Registered Since</strong><span>{{ student.created_at }}</span></div>
+</div>
+<div class="nav-buttons">
+  <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+  <a href="{{ url_for('events') }}" class="btn">View Events</a>
+</div>
+{% endblock %}
